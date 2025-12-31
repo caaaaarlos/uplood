@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucky Slot Machine</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>ASCII Slot Machine</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Courier New', monospace;
         }
         
         body {
-            background: linear-gradient(135deg, #0a2e38 0%, #1a1a2e 100%);
-            color: #fff;
+            background-color: #0a0a0a;
+            color: #0af50a;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            overflow-x: hidden;
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             width: 100%;
             margin: 0 auto;
             padding: 20px;
@@ -32,276 +32,261 @@
         
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             width: 100%;
+            border-bottom: 2px dashed #0af50a;
+            padding-bottom: 15px;
         }
         
         h1 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
-            background: linear-gradient(90deg, #ffd700, #ff8c00);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            color: #0af50a;
+            text-shadow: 0 0 10px #0af50a;
+            letter-spacing: 2px;
         }
         
         .subtitle {
             font-size: 1.2rem;
-            color: #a0d2ff;
-            margin-bottom: 20px;
+            color: #0af50a;
+            margin-bottom: 10px;
         }
         
-        .game-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
+        .terminal {
+            background-color: #000;
+            border: 3px solid #0af50a;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(10, 245, 10, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .terminal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: repeating-linear-gradient(
+                90deg,
+                #0af50a 0px,
+                #0af50a 10px,
+                transparent 10px,
+                transparent 20px
+            );
         }
         
         .slot-machine {
-            background: linear-gradient(145deg, #2c3e50, #1c2833);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            border: 5px solid #34495e;
-            position: relative;
-            width: 100%;
-            max-width: 800px;
+            text-align: center;
+            margin-bottom: 30px;
         }
         
-        .slot-machine::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: linear-gradient(45deg, #ffd700, #ff8c00, #ffd700);
-            border-radius: 25px;
-            z-index: -1;
-            opacity: 0.4;
+        .slot-frame {
+            background-color: #111;
+            padding: 15px;
+            border: 2px solid #0af50a;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: inline-block;
         }
         
-        .reels-container {
+        .reels {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-            perspective: 1000px;
+            gap: 10px;
+            margin-bottom: 15px;
         }
         
         .reel {
-            width: 150px;
-            height: 300px;
-            background: linear-gradient(180deg, #0c2461, #1e3799);
-            border-radius: 15px;
+            width: 120px;
+            height: 180px;
+            background-color: #000;
+            border: 1px solid #0af50a;
+            border-radius: 3px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.5rem;
             overflow: hidden;
             position: relative;
-            border: 8px solid #2c3e50;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
         }
         
-        .reel-inner {
+        .reel-content {
             position: absolute;
             width: 100%;
-            transition: top 0.1s;
+            transition: top 0.2s;
         }
         
-        .symbol {
-            width: 150px;
-            height: 100px;
+        .reel-symbol {
+            height: 90px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 4rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .control-panel {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            width: 100%;
-            max-width: 600px;
         }
         
         .spin-btn {
-            background: linear-gradient(90deg, #ff416c, #ff4b2b);
-            color: white;
-            border: none;
-            padding: 18px 50px;
+            background-color: #000;
+            color: #0af50a;
+            border: 2px solid #0af50a;
+            padding: 15px 40px;
             font-size: 1.8rem;
             font-weight: bold;
-            border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 20px rgba(255, 65, 108, 0.4);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            transition: all 0.2s;
+            margin: 10px 0;
+            letter-spacing: 2px;
         }
         
         .spin-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 25px rgba(255, 65, 108, 0.6);
+            background-color: #0af50a;
+            color: #000;
+            box-shadow: 0 0 20px #0af50a;
         }
         
         .spin-btn:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
         
         .spin-btn:disabled {
-            background: linear-gradient(90deg, #666, #888);
+            opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
+        }
+        
+        .spin-btn:disabled:hover {
+            background-color: #000;
+            color: #0af50a;
             box-shadow: none;
         }
         
-        .bet-controls {
+        .controls {
             display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .control-group {
+            text-align: center;
+            background-color: #111;
+            padding: 15px;
+            border: 1px solid #0af50a;
+            border-radius: 5px;
+            min-width: 200px;
+        }
+        
+        .control-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #0af50a;
+            text-decoration: underline;
+        }
+        
+        .bet-controls, .game-stats {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
             align-items: center;
-            gap: 20px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px 25px;
-            border-radius: 50px;
+            margin-top: 10px;
         }
         
         .bet-btn {
-            background: #3498db;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
+            background-color: #000;
+            color: #0af50a;
+            border: 1px solid #0af50a;
+            width: 40px;
+            height: 40px;
             font-size: 1.5rem;
             cursor: pointer;
-            transition: all 0.2s;
         }
         
         .bet-btn:hover {
-            background: #2980b9;
-            transform: scale(1.1);
+            background-color: #0af50a;
+            color: #000;
         }
         
-        .bet-display {
+        .bet-amount, .coins-amount, .wins-count, .spins-count {
             font-size: 1.8rem;
             font-weight: bold;
-            min-width: 100px;
-            text-align: center;
-            color: #ffd700;
-        }
-        
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            width: 100%;
-            margin-top: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 15px;
-        }
-        
-        .stat-box {
-            text-align: center;
-        }
-        
-        .stat-label {
-            font-size: 1rem;
-            color: #a0d2ff;
-            margin-bottom: 5px;
-        }
-        
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #fff;
-        }
-        
-        .coins {
-            color: #ffd700;
+            color: #0af50a;
         }
         
         .win-message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            color: #000;
-            padding: 30px 50px;
-            border-radius: 20px;
-            font-size: 3rem;
+            background-color: #000;
+            border: 3px solid #0af50a;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 1.8rem;
             font-weight: bold;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            z-index: 100;
-            transition: transform 0.5s;
+            display: none;
+            animation: blink 1s infinite;
         }
         
-        .win-message.show {
-            transform: translate(-50%, -50%) scale(1);
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
         
-        .symbol-info {
-            margin-top: 30px;
-            width: 100%;
-            max-width: 800px;
-            background: rgba(0, 0, 0, 0.3);
+        .symbols-info {
+            background-color: #111;
             padding: 20px;
-            border-radius: 15px;
+            border: 1px solid #0af50a;
+            border-radius: 5px;
+            margin-bottom: 30px;
         }
         
-        .symbol-info h3 {
-            color: #ffd700;
-            margin-bottom: 15px;
+        .symbols-info h3 {
             text-align: center;
+            margin-bottom: 15px;
             font-size: 1.5rem;
+            text-decoration: underline;
         }
         
         .symbol-list {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 15px;
         }
         
         .symbol-item {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 10px;
+            padding: 5px;
         }
         
-        .symbol-item .symbol {
-            width: 80px;
-            height: 80px;
-            font-size: 2.5rem;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
+        .symbol-icon {
+            font-size: 2rem;
+            width: 60px;
+            text-align: center;
         }
         
-        .symbol-multiplier {
-            color: #ffd700;
+        .symbol-desc {
+            font-size: 1rem;
+        }
+        
+        .multiplier {
+            color: #ff0;
             font-weight: bold;
         }
         
         .instructions {
-            margin-top: 30px;
-            background: rgba(0, 0, 0, 0.2);
+            background-color: #111;
             padding: 20px;
-            border-radius: 15px;
-            max-width: 800px;
+            border: 1px solid #0af50a;
+            border-radius: 5px;
+            margin-bottom: 30px;
         }
         
         .instructions h3 {
-            color: #a0d2ff;
             margin-bottom: 10px;
+            font-size: 1.5rem;
+            text-decoration: underline;
         }
         
         .instructions ul {
@@ -314,127 +299,200 @@
         }
         
         footer {
-            margin-top: 30px;
             text-align: center;
-            color: #7f8c8d;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #0af50a;
+            width: 100%;
+            color: #0af50a;
             font-size: 0.9rem;
         }
         
+        .ascii-border {
+            font-family: monospace;
+            white-space: pre;
+            font-size: 12px;
+            color: #0af50a;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .retro-text {
+            font-family: 'Courier New', monospace;
+            color: #0af50a;
+        }
+        
+        .glitch {
+            position: relative;
+            animation: glitch 5s infinite;
+        }
+        
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(0, 0, 0, 0.1) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 999;
+        }
+        
         @media (max-width: 768px) {
-            .reels-container {
-                gap: 10px;
-            }
-            
             .reel {
-                width: 100px;
-                height: 200px;
-            }
-            
-            .symbol {
-                width: 100px;
-                height: 67px;
+                width: 80px;
+                height: 120px;
                 font-size: 2.5rem;
             }
             
+            .reel-symbol {
+                height: 60px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .control-group {
+                width: 100%;
+                max-width: 300px;
+            }
+            
             h1 {
-                font-size: 2rem;
-            }
-            
-            .spin-btn {
-                padding: 15px 30px;
-                font-size: 1.5rem;
-            }
-            
-            .bet-display {
-                font-size: 1.5rem;
-            }
-            
-            .stat-value {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
+    <div class="scanlines"></div>
     <div class="container">
         <header>
-            <h1><i class="fas fa-coins"></i> Lucky Slot Machine</h1>
-            <p class="subtitle">Spin the reels and test your luck!</p>
+            <div class="ascii-border">
+  _____   _       _     _____  _      _____   _____  _______ ______ 
+ / ____| | |     | |   |_   _|| |    |_   _| |_   _||__   __||  ____|
+| (___   | |     | |     | |  | |      | |     | |     | |   | |__   
+ \___ \  | |     | |     | |  | |      | |     | |     | |   |  __|  
+ ____) | | |____ | |____ _| |_ | |____ _| |_   _| |_    | |   | |____ 
+|_____/  |______||______|_____||______|_____| |_____|   |_|   |______|
+            </div>
+            <h1 class="glitch">ASCII SLOT MACHINE</h1>
+            <p class="subtitle">RETRO TERMINAL GAMING EXPERIENCE</p>
         </header>
         
-        <div class="game-container">
+        <div class="terminal">
             <div class="slot-machine">
-                <div class="reels-container">
-                    <div class="reel" id="reel1">
-                        <div class="reel-inner" id="reelInner1"></div>
+                <div class="slot-frame">
+                    <div class="reels">
+                        <div class="reel" id="reel1">
+                            <div class="reel-content" id="reelContent1">
+                                <!-- Symbols will be inserted here by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="reel" id="reel2">
+                            <div class="reel-content" id="reelContent2">
+                                <!-- Symbols will be inserted here by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="reel" id="reel3">
+                            <div class="reel-content" id="reelContent3">
+                                <!-- Symbols will be inserted here by JavaScript -->
+                            </div>
+                        </div>
                     </div>
-                    <div class="reel" id="reel2">
-                        <div class="reel-inner" id="reelInner2"></div>
-                    </div>
-                    <div class="reel" id="reel3">
-                        <div class="reel-inner" id="reelInner3"></div>
+                    
+                    <div class="ascii-border">
+╔══════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                                      ║
+║                                   [PRESS SPIN TO PLAY]                                               ║
+║                                                                                                      ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
                     </div>
                 </div>
                 
-                <div class="control-panel">
-                    <button class="spin-btn" id="spinBtn">
-                        <i class="fas fa-play"></i> SPIN
-                    </button>
-                    
+                <button class="spin-btn" id="spinBtn">
+                    [ SPIN REELS ]
+                </button>
+                
+                <div id="winMessage" class="win-message">
+                    <!-- Win message will appear here -->
+                </div>
+            </div>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <div class="control-title">BET CONTROLS</div>
                     <div class="bet-controls">
-                        <button class="bet-btn" id="decreaseBet">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <div class="bet-display">
-                            <span id="currentBet">10</span> <i class="fas fa-coins coins"></i>
+                        <button class="bet-btn" id="decreaseBet">-</button>
+                        <div>
+                            <div>BET AMOUNT</div>
+                            <div class="bet-amount" id="currentBet">10</div>
                         </div>
-                        <button class="bet-btn" id="increaseBet">
-                            <i class="fas fa-plus"></i>
-                        </button>
+                        <button class="bet-btn" id="increaseBet">+</button>
                     </div>
-                    
-                    <div class="stats">
-                        <div class="stat-box">
-                            <div class="stat-label">COINS</div>
-                            <div class="stat-value coins" id="coinsCount">100</div>
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-title">GAME STATS</div>
+                    <div class="game-stats">
+                        <div>
+                            <div>COINS</div>
+                            <div class="coins-amount" id="coinsCount">100</div>
                         </div>
-                        <div class="stat-box">
-                            <div class="stat-label">WINS</div>
-                            <div class="stat-value" id="winsCount">0</div>
+                        <div>
+                            <div>WINS</div>
+                            <div class="wins-count" id="winsCount">0</div>
                         </div>
-                        <div class="stat-box">
-                            <div class="stat-label">SPINS</div>
-                            <div class="stat-value" id="spinsCount">0</div>
+                        <div>
+                            <div>SPINS</div>
+                            <div class="spins-count" id="spinsCount">0</div>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <div class="symbol-info">
-                <h3>Symbol Payouts</h3>
-                <div class="symbol-list" id="symbolList"></div>
-            </div>
-            
-            <div class="instructions">
-                <h3>How to Play</h3>
-                <ul>
-                    <li>Click the SPIN button to start the slot machine</li>
-                    <li>Adjust your bet using the +/- buttons</li>
-                    <li>Match 3 symbols horizontally to win coins</li>
-                    <li>Different symbols have different payout multipliers</li>
-                    <li>You start with 100 coins - try to get as many as you can!</li>
-                </ul>
+        </div>
+        
+        <div class="symbols-info">
+            <h3>SYMBOL PAYOUTS</h3>
+            <div class="symbol-list" id="symbolList">
+                <!-- Symbols will be inserted here by JavaScript -->
             </div>
         </div>
         
+        <div class="instructions">
+            <h3>HOW TO PLAY</h3>
+            <ul>
+                <li>Click <strong>[ SPIN REELS ]</strong> to start the slot machine</li>
+                <li>Adjust your bet using the <strong>+</strong> and <strong>-</strong> buttons</li>
+                <li>Match 3 symbols horizontally to win coins</li>
+                <li>Different symbols have different payout multipliers</li>
+                <li>You start with 100 coins - try to get as many as you can!</li>
+                <li>Watch for special ASCII animations when you win!</li>
+            </ul>
+        </div>
+        
         <footer>
-            <p>Lucky Slot Machine &copy; 2023 | Created for fun and entertainment</p>
+            <div class="ascii-border">
+====================================================================================================
+            </div>
+            <p>ASCII SLOT MACHINE v1.0 | RETRO TERMINAL STYLE | CREATED WITH ♥ FOR TERMINAL LOVERS</p>
+            <p>PRESS F11 FOR FULLSCREEN IMMERSION</p>
         </footer>
-    </div>
-    
-    <div class="win-message" id="winMessage">
-        <div id="winText">WINNER!</div>
-        <div id="winAmount" style="font-size: 1.5rem; margin-top: 10px;"></div>
     </div>
     
     <script>
@@ -445,16 +503,22 @@
         let spins = 0;
         let isSpinning = false;
         
-        // Slot symbols with their multipliers
+        // ASCII symbols with their multipliers
         const symbols = [
-            { icon: "🍒", name: "Cherry", multiplier: 3 },
-            { icon: "🍋", name: "Lemon", multiplier: 2 },
-            { icon: "🍊", name: "Orange", multiplier: 2 },
-            { icon: "🍉", name: "Watermelon", multiplier: 5 },
-            { icon: "⭐", name: "Star", multiplier: 10 },
-            { icon: "7️⃣", name: "Seven", multiplier: 20 },
-            { icon: "🔔", name: "Bell", multiplier: 7 },
-            { icon: "💎", name: "Diamond", multiplier: 15 }
+            { ascii: "(7)", name: "Lucky Seven", multiplier: 20 },
+            { ascii: "$", name: "Dollar", multiplier: 15 },
+            { ascii: "★", name: "Star", multiplier: 10 },
+            { ascii: "♠", name: "Spade", multiplier: 8 },
+            { ascii: "♥", name: "Heart", multiplier: 8 },
+            { ascii: "♦", name: "Diamond", multiplier: 8 },
+            { ascii: "♣", name: "Club", multiplier: 8 },
+            { ascii: "●", name: "Ball", multiplier: 5 },
+            { ascii: "◆", name: "Rhombus", multiplier: 5 },
+            { ascii: "▲", name: "Triangle", multiplier: 5 },
+            { ascii: "■", name: "Square", multiplier: 3 },
+            { ascii: "○", name: "Circle", multiplier: 3 },
+            { ascii: "□", name: "Empty Square", multiplier: 2 },
+            { ascii: "△", name: "Empty Triangle", multiplier: 2 }
         ];
         
         // DOM elements
@@ -466,15 +530,13 @@
         const winsCountElement = document.getElementById('winsCount');
         const spinsCountElement = document.getElementById('spinsCount');
         const winMessage = document.getElementById('winMessage');
-        const winText = document.getElementById('winText');
-        const winAmount = document.getElementById('winAmount');
         const symbolList = document.getElementById('symbolList');
         
         // Reel elements
-        const reelElements = [
-            document.getElementById('reelInner1'),
-            document.getElementById('reelInner2'),
-            document.getElementById('reelInner3')
+        const reelContents = [
+            document.getElementById('reelContent1'),
+            document.getElementById('reelContent2'),
+            document.getElementById('reelContent3')
         ];
         
         // Initialize the game
@@ -485,11 +547,39 @@
             
             // Event listeners
             spinBtn.addEventListener('click', spinReels);
-            decreaseBetBtn.addEventListener('click', () => changeBet(-10));
-            increaseBetBtn.addEventListener('click', () => changeBet(10));
+            decreaseBetBtn.addEventListener('click', () => changeBet(-5));
+            increaseBetBtn.addEventListener('click', () => changeBet(5));
             
-            // Sound effects (using Web Audio API for simple beeps)
-            initAudio();
+            // Add some retro terminal effects
+            document.addEventListener('keydown', handleKeyPress);
+            
+            // Play startup sound
+            playStartupSound();
+        }
+        
+        // Handle keyboard controls
+        function handleKeyPress(e) {
+            if (isSpinning) return;
+            
+            switch(e.key) {
+                case ' ':
+                case 'Enter':
+                    spinReels();
+                    e.preventDefault();
+                    break;
+                case '+':
+                case '=':
+                    changeBet(5);
+                    break;
+                case '-':
+                case '_':
+                    changeBet(-5);
+                    break;
+                case 'r':
+                case 'R':
+                    resetGame();
+                    break;
+            }
         }
         
         // Populate the symbol payout info
@@ -499,9 +589,11 @@
                 symbolItem.className = 'symbol-item';
                 
                 symbolItem.innerHTML = `
-                    <div class="symbol">${symbol.icon}</div>
-                    <div class="symbol-name">${symbol.name}</div>
-                    <div class="symbol-multiplier">x${symbol.multiplier}</div>
+                    <div class="symbol-icon">${symbol.ascii}</div>
+                    <div class="symbol-desc">
+                        <div>${symbol.name}</div>
+                        <div class="multiplier">x${symbol.multiplier} payout</div>
+                    </div>
                 `;
                 
                 symbolList.appendChild(symbolItem);
@@ -510,26 +602,26 @@
         
         // Initialize reels with symbols
         function initializeReels() {
-            // Create multiple copies of symbols to make the reel appear continuous
-            for (let i = 0; i < reelElements.length; i++) {
+            for (let i = 0; i < reelContents.length; i++) {
                 let reelHTML = '';
                 // Add extra symbols at the beginning and end for smooth animation
-                for (let j = 0; j < 12; j++) {
+                for (let j = 0; j < 15; j++) {
                     const symbolIndex = Math.floor(Math.random() * symbols.length);
-                    reelHTML += `<div class="symbol">${symbols[symbolIndex].icon}</div>`;
+                    reelHTML += `<div class="reel-symbol">${symbols[symbolIndex].ascii}</div>`;
                 }
-                reelElements[i].innerHTML = reelHTML;
+                reelContents[i].innerHTML = reelHTML;
                 // Position the reel to show the middle symbols
-                reelElements[i].style.top = '-400px';
+                reelContents[i].style.top = '-270px';
             }
         }
         
         // Change the current bet
         function changeBet(amount) {
             const newBet = currentBet + amount;
-            if (newBet >= 10 && newBet <= 100 && newBet <= coins) {
+            if (newBet >= 5 && newBet <= 50 && newBet <= coins) {
                 currentBet = newBet;
                 updateDisplay();
+                playClickSound();
             }
         }
         
@@ -555,40 +647,40 @@
             
             isSpinning = true;
             spinBtn.disabled = true;
-            spinBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SPINNING';
+            spinBtn.textContent = '[ SPINNING... ]';
+            
+            // Hide any previous win message
+            winMessage.style.display = 'none';
             
             // Play spin sound
-            playSound('spin');
-            
-            // Reset win message
-            winMessage.classList.remove('show');
+            playSpinSound();
             
             // Results for each reel
             const results = [];
             
             // Spin each reel with different durations for more realistic effect
-            for (let i = 0; i < reelElements.length; i++) {
+            for (let i = 0; i < reelContents.length; i++) {
                 // Randomly select a result for this reel
                 const resultIndex = Math.floor(Math.random() * symbols.length);
                 results.push(resultIndex);
                 
                 // Calculate how far to spin (multiple full rotations + target position)
-                const spinDuration = 1500 + i * 300; // Stagger the reel stops
-                const targetPosition = -400 - (resultIndex * 100); // Each symbol is 100px tall
+                const spinDuration = 1200 + i * 400; // Stagger the reel stops
+                const targetPosition = -270 - (resultIndex * 90); // Each symbol is 90px tall
                 
                 // Animate the reel
-                animateReel(reelElements[i], targetPosition, spinDuration, i === reelElements.length - 1);
+                animateReel(reelContents[i], targetPosition, spinDuration, i === reelContents.length - 1);
             }
             
             // Store results for checking after animation completes
             setTimeout(() => {
                 checkResults(results);
-            }, 2500);
+            }, 2000);
         }
         
         // Animate a single reel
         function animateReel(reelElement, targetPosition, duration, isLast) {
-            const startPosition = parseInt(reelElement.style.top) || -400;
+            const startPosition = parseInt(reelElement.style.top) || -270;
             const distance = targetPosition - startPosition;
             const startTime = performance.now();
             
@@ -605,15 +697,15 @@
                     requestAnimationFrame(animate);
                 } else {
                     // Reset position if too far from center (for continuous spinning effect)
-                    if (parseInt(reelElement.style.top) <= -1000) {
-                        reelElement.style.top = '-400px';
+                    if (parseInt(reelElement.style.top) <= -900) {
+                        reelElement.style.top = '-270px';
                     }
                     
                     // If this is the last reel, enable the spin button
                     if (isLast) {
                         isSpinning = false;
                         spinBtn.disabled = coins < currentBet;
-                        spinBtn.innerHTML = '<i class="fas fa-play"></i> SPIN';
+                        spinBtn.textContent = '[ SPIN REELS ]';
                     }
                 }
             }
@@ -627,13 +719,13 @@
             const resultSymbols = results.map(index => symbols[index]);
             
             // Check if all three symbols match
-            const allMatch = resultSymbols[0].icon === resultSymbols[1].icon && 
-                            resultSymbols[1].icon === resultSymbols[2].icon;
+            const allMatch = resultSymbols[0].ascii === resultSymbols[1].ascii && 
+                            resultSymbols[1].ascii === resultSymbols[2].ascii;
             
             // Check if two symbols match
-            const twoMatch = resultSymbols[0].icon === resultSymbols[1].icon || 
-                            resultSymbols[1].icon === resultSymbols[2].icon || 
-                            resultSymbols[0].icon === resultSymbols[2].icon;
+            const twoMatch = resultSymbols[0].ascii === resultSymbols[1].ascii || 
+                            resultSymbols[1].ascii === resultSymbols[2].ascii || 
+                            resultSymbols[0].ascii === resultSymbols[2].ascii;
             
             let winAmount = 0;
             
@@ -642,13 +734,14 @@
                 winAmount = currentBet * resultSymbols[0].multiplier;
                 wins++;
                 coins += winAmount;
-                showWinMessage(`JACKPOT! ${resultSymbols[0].icon} ${resultSymbols[0].icon} ${resultSymbols[0].icon}`, winAmount);
-                playSound('win');
+                showWinMessage(`JACKPOT! ${resultSymbols[0].ascii} ${resultSymbols[0].ascii} ${resultSymbols[0].ascii}`, winAmount);
+                playWinSound();
+                showAsciiAnimation('jackpot');
             } else if (twoMatch) {
                 // Two symbols match - small win
                 // Find which symbol appears twice
                 let matchingSymbol;
-                if (resultSymbols[0].icon === resultSymbols[1].icon || resultSymbols[0].icon === resultSymbols[2].icon) {
+                if (resultSymbols[0].ascii === resultSymbols[1].ascii || resultSymbols[0].ascii === resultSymbols[2].ascii) {
                     matchingSymbol = resultSymbols[0];
                 } else {
                     matchingSymbol = resultSymbols[1];
@@ -658,59 +751,139 @@
                 wins++;
                 coins += winAmount;
                 showWinMessage(`TWO OF A KIND!`, winAmount);
-                playSound('smallWin');
+                playSmallWinSound();
+                showAsciiAnimation('win');
             } else {
                 // No win
-                playSound('lose');
+                playLoseSound();
+                showAsciiAnimation('lose');
             }
             
             updateDisplay();
         }
         
-        // Show win message
+        // Show win message with ASCII art
         function showWinMessage(message, amount) {
-            winText.textContent = message;
-            winAmount.textContent = `You won ${amount} coins!`;
-            winMessage.classList.add('show');
+            winMessage.innerHTML = `
+                <div>${message}</div>
+                <div>YOU WON ${amount} COINS!</div>
+            `;
+            winMessage.style.display = 'block';
+        }
+        
+        // Show ASCII animation based on result
+        function showAsciiAnimation(type) {
+            const asciiArt = document.createElement('div');
+            asciiArt.className = 'ascii-border';
+            asciiArt.style.fontSize = '14px';
+            asciiArt.style.margin = '20px 0';
+            asciiArt.style.animation = 'glitch 2s';
             
-            // Hide win message after 3 seconds
+            if (type === 'jackpot') {
+                asciiArt.innerHTML = `
+╔══════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                                      ║
+║   ██╗ █████╗  ██████╗██╗  ██╗██████╗  ██████╗ ████████╗    ██╗    ██╗██╗███╗   ██╗███╗   ██╗███████╗║
+║   ██║██╔══██╗██╔════╝██║ ██╔╝██╔══██╗██╔═══██╗╚══██╔══╝    ██║    ██║██║████╗  ██║████╗  ██║██╔════╝║
+║   ██║███████║██║     █████╔╝ ██████╔╝██║   ██║   ██║       ██║ █╗ ██║██║██╔██╗ ██║██╔██╗ ██║███████╗║
+║██╗██║██╔══██║██║     ██╔═██╗ ██╔═══╝ ██║   ██║   ██║       ██║███╗██║██║██║╚██╗██║██║╚██╗██║╚════██║║
+║╚████║██║  ██║╚██████╗██║  ██╗██║     ╚██████╔╝   ██║       ╚███╔███╔╝██║██║ ╚████║██║ ╚████║███████║║
+║ ╚═══╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝      ╚═════╝    ╚═╝        ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝║
+║                                                                                                      ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
+                `;
+            } else if (type === 'win') {
+                asciiArt.innerHTML = `
+╔══════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                                      ║
+║    ██╗    ██╗██╗███╗   ██╗    ██╗    ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗ ██████╗ ██╗   ██╗██████╗   ║
+║    ██║    ██║██║████╗  ██║    ██║    ██║██╔═══██╗██║   ██║    ██║    ██║██╔═══██╗██║   ██║██╔══██╗  ║
+║    ██║ █╗ ██║██║██╔██╗ ██║    ██║ █╗ ██║██║   ██║██║   ██║    ██║ █╗ ██║██║   ██║██║   ██║██████╔╝  ║
+║    ██║███╗██║██║██║╚██╗██║    ██║███╗██║██║   ██║██║   ██║    ██║███╗██║██║   ██║██║   ██║██╔═══╝   ║
+║    ╚███╔███╔╝██║██║ ╚████║    ╚███╔███╔╝╚██████╔╝╚██████╔╝    ╚███╔███╔╝╚██████╔╝╚██████╔╝██║       ║
+║     ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝     ╚══╝╚══╝  ╚═════╝  ╚═════╝      ╚══╝╚══╝  ╚═════╝  ╚═════╝ ╚═╝       ║
+║                                                                                                      ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
+                `;
+            } else {
+                asciiArt.innerHTML = `
+╔══════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                                      ║
+║    ███╗   ██╗ ██████╗     ██╗    ██╗██╗███╗   ██╗    ██╗      ██████╗ ███████╗███████╗              ║
+║    ████╗  ██║██╔═══██╗    ██║    ██║██║████╗  ██║    ██║     ██╔═══██╗██╔════╝██╔════╝              ║
+║    ██╔██╗ ██║██║   ██║    ██║ █╗ ██║██║██╔██╗ ██║    ██║     ██║   ██║███████╗█████╗                ║
+║    ██║╚██╗██║██║   ██║    ██║███╗██║██║██║╚██╗██║    ██║     ██║   ██║╚════██║██╔══╝                ║
+║    ██║ ╚████║╚██████╔╝    ╚███╔███╔╝██║██║ ╚████║    ███████╗╚██████╔╝███████║███████╗              ║
+║    ╚═╝  ╚═══╝ ╚═════╝      ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝    ╚══════╝ ╚═════╝ ╚══════╝╚══════╝              ║
+║                                                                                                      ║
+║                                  BETTER LUCK NEXT TIME!                                             ║
+║                                                                                                      ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
+                `;
+            }
+            
+            document.querySelector('.slot-machine').appendChild(asciiArt);
+            
+            // Remove the animation after 3 seconds
             setTimeout(() => {
-                winMessage.classList.remove('show');
+                asciiArt.remove();
             }, 3000);
         }
         
-        // Audio functions for sound effects
-        function initAudio() {
-            // We'll use simple beeps for sound effects
-            // In a real game, you would use actual sound files
+        // Reset the game
+        function resetGame() {
+            coins = 100;
+            currentBet = 10;
+            wins = 0;
+            spins = 0;
+            updateDisplay();
+            winMessage.style.display = 'none';
+            playClickSound();
         }
         
-        function playSound(type) {
-            // Create audio context
+        // Audio functions for retro terminal sounds
+        function playStartupSound() {
+            // Startup beep sequence
+            beep(200, 100);
+            setTimeout(() => beep(300, 100), 150);
+            setTimeout(() => beep(400, 200), 300);
+        }
+        
+        function playSpinSound() {
+            // Spin sound - rising tones
+            beep(300, 100);
+            setTimeout(() => beep(400, 100), 120);
+            setTimeout(() => beep(500, 100), 240);
+        }
+        
+        function playWinSound() {
+            // Win fanfare
+            beep(523.25, 200); // C
+            setTimeout(() => beep(659.25, 200), 250); // E
+            setTimeout(() => beep(783.99, 200), 500); // G
+            setTimeout(() => beep(1046.50, 400), 750); // C (high)
+        }
+        
+        function playSmallWinSound() {
+            // Small win
+            beep(659.25, 200); // E
+            setTimeout(() => beep(783.99, 300), 250); // G
+        }
+        
+        function playLoseSound() {
+            // Lose sound
+            beep(220, 300); // Low A
+            setTimeout(() => beep(196, 400), 350); // G
+        }
+        
+        function playClickSound() {
+            // Click sound
+            beep(100, 50);
+        }
+        
+        // Beep function using Web Audio API
+        function beep(frequency, duration) {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            
-            if (type === 'spin') {
-                // Spin sound - a rising tone
-                playBeep(audioContext, 200, 0.1, 0.2);
-                setTimeout(() => playBeep(audioContext, 300, 0.1, 0.2), 100);
-                setTimeout(() => playBeep(audioContext, 400, 0.1, 0.2), 200);
-            } else if (type === 'win') {
-                // Win sound - a fanfare
-                playBeep(audioContext, 523.25, 0.2, 0.5); // C
-                setTimeout(() => playBeep(audioContext, 659.25, 0.2, 0.5), 200); // E
-                setTimeout(() => playBeep(audioContext, 783.99, 0.2, 0.5), 400); // G
-                setTimeout(() => playBeep(audioContext, 1046.50, 0.5, 0.5), 600); // C (high)
-            } else if (type === 'smallWin') {
-                // Small win sound
-                playBeep(audioContext, 659.25, 0.2, 0.3); // E
-                setTimeout(() => playBeep(audioContext, 783.99, 0.3, 0.3), 200); // G
-            } else if (type === 'lose') {
-                // Lose sound
-                playBeep(audioContext, 220, 0.3, 0.2); // Low A
-            }
-        }
-        
-        function playBeep(audioContext, frequency, duration, volume) {
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
             
@@ -718,17 +891,17 @@
             gainNode.connect(audioContext.destination);
             
             oscillator.frequency.value = frequency;
-            oscillator.type = 'sine';
+            oscillator.type = 'square';
             
-            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration / 1000);
             
             oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + duration);
+            oscillator.stop(audioContext.currentTime + duration / 1000);
         }
         
         // Initialize the game when the page loads
         window.addEventListener('DOMContentLoaded', initGame);
     </script>
 </body>
-</html>
+</html>=
